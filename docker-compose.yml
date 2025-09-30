@@ -1,0 +1,23 @@
+#version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: myapp-frontend
+    expose:
+      - "4173" # internal only (nginx talks to this)
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: myapp-nginx
+    depends_on:
+      - frontend
+    ports:
+      - "8080:80" # host:container
+
